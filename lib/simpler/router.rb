@@ -16,10 +16,17 @@ module Simpler
     end
 
     def route_for(env)
+      puts "route_for call #{env}"
       method = env['REQUEST_METHOD'].downcase.to_sym
+      puts "LOG METHOD route_for #{method}"
       path = env['PATH_INFO']
+      params = env['simpler.route_params'] ||= {}
+      puts "LOG path route_for #{path}"
+      puts "LOG routes FIND #{@routes.find { |route| route.match?(method, path,params) }}"
+  
 
-      @routes.find { |route| route.match?(method, path) }
+      params = env['simpler.route_params'] ||= {}
+      @routes.find { |route| route.match?(method, path, params) }
     end
 
     private
